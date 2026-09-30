@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Luyện Pinyin</title>
+<meta name="theme-color" content="#1f6f5c">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="bieu_tuong.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="bieu_tuong_180.png">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header>
+  <h1>Luyện Pinyin</h1>
+  <nav>
+    <button data-man="lo_trinh">Lộ trình</button>
+    <button data-man="nguon">Thông tin</button>
+  </nav>
+</header>
+
+<main>
+  <!-- Lần đầu dùng -->
+  <section id="man_chao" hidden>
+    <h2>Chào bạn</h2>
+    <p>Trước khi luyện, app cần nghe giọng bạn một lần (khoảng 2 phút) để biết giọng bạn cao thấp thế nào. Nhờ vậy
+      "thanh 1 cao" là cao <b>so với chính giọng bạn</b>, không so với người khác.</p>
+    <ol>
+      <li>Im lặng 3 giây (đo tiếng ồn trong phòng).</li>
+      <li>Nói "a" trượt từ thấp nhất lên cao nhất.</li>
+      <li>Nghe mẫu rồi đọc 8 âm tiết: mā má mǎ mà (hai lượt).</li>
+    </ol>
+    <p class="nho">Ngồi chỗ yên tĩnh, điện thoại cách miệng khoảng một gang tay.</p>
+    <button class="chinh" id="nut_bat_dau_hc">Bắt đầu</button>
+    <p class="loi" id="loi_mic" hidden></p>
+  </section>
+
+  <!-- Hiệu chuẩn giọng (1.3.3) -->
+  <section id="man_hieu_chuan" hidden>
+    <h2>Hiệu chuẩn giọng</h2>
+    <p id="hc_buoc" class="to"></p>
+    <p id="hc_huong_dan"></p>
+    <div class="muc_am"><div class="thanh_muc"><div id="hc_muc_am"></div></div></div>
+    <button class="chinh" id="hc_nut"></button>
+    <p id="hc_ket_qua"></p>
+  </section>
+
+  <!-- Lộ trình chặng 1–4 (1.5.3) -->
+  <section id="man_lo_trinh" hidden>
+    <div class="hang">
+      <h2>Lộ trình</h2>
+      <button class="chinh" id="nut_luyen_tiep">Luyện tiếp</button>
+    </div>
+    <p id="lt_tong" class="nho"></p>
+    <div id="lt_danh_sach"></div>
+  </section>
+
+  <!-- Luyện một mục (1.4.4, 1.6.6) -->
+  <section id="man_luyen" hidden>
+    <div class="hang">
+      <button class="phu" id="nut_ve_lo_trinh">‹ Lộ trình</button>
+      <span id="luyen_lan" class="nho"></span>
+    </div>
+    <div class="muc_am">
+      <div id="luyen_pinyin" class="pinyin"></div>
+      <div id="luyen_vi_du" class="nho"></div>
+    </div>
+    <div class="hang nut_nghe">
+      <button id="nut_nghe">🔊 Nghe mẫu</button>
+      <button id="nut_nghe_cham">🐢 Chậm</button>
+      <button id="nut_giong" class="phu"></button>
+    </div>
+    <button class="chinh to" id="nut_doc">🎤 Đọc</button>
+    <p id="luyen_trang_thai" class="nho"></p>
+    <div class="ba_o">
+      <div class="o" id="o_thanh_mau"><div class="nhan">声母<small>phụ âm đầu</small></div><div class="dau">·</div></div>
+      <div class="o" id="o_van"><div class="nhan">韵母<small>vần</small></div><div class="dau">·</div></div>
+      <div class="o" id="o_thanh"><div class="nhan">声调<small>thanh điệu</small></div><div class="dau">·</div></div>
+    </div>
+    <canvas id="do_thi" width="600" height="260" aria-label="Đường cao độ của bạn so với mẫu"></canvas>
+    <p class="chu_giai"><span class="vach mau"></span> mẫu <span class="vach ban"></span> bạn — 5 bậc cao độ theo giọng của chính mỗi người</p>
+    <div id="thong_diep"></div>
+    <div class="hang">
+      <button id="nut_ab" disabled>A-B: mẫu → mình → mẫu</button>
+      <button id="nut_tiep" class="chinh" hidden>Mục tiếp ›</button>
+    </div>
+    <details id="thu_tep" hidden>
+      <summary>Thử bằng tệp âm thanh (khi không có micro)</summary>
+      <input type="file" id="chon_tep" accept="audio/*">
+    </details>
+  </section>
+
+  <!-- Thông tin, nguồn, ghi công (1.8.3) -->
+  <section id="man_nguon" hidden>
+    <h2>Thông tin</h2>
+    <p>App luyện phát âm pinyin cá nhân, phi thương mại. Chấm 3 ô cho mỗi lần đọc: phụ âm đầu (bật hơi), vần (hiện chỉ
+      nghe so sánh A-B) và thanh điệu. App <b>không</b> chấm "giống người bản ngữ bao nhiêu %".</p>
+    <h3>Hồ sơ giọng</h3>
+    <p id="nguon_ho_so" class="nho"></p>
+    <div class="hang">
+      <button id="nut_hc_lai">Hiệu chuẩn lại</button>
+      <button id="nut_xuat">Tải nhật ký luyện (JSON)</button>
+    </div>
+    <h3>Nguồn & giấy phép</h3>
+    <ul class="nho">
+      <li>Âm mẫu: <b>MCAE-Monosyllable</b> (osf.io/h3uem), giấy phép CC BY-NC 4.0 — dùng phi thương mại, có ghi công.</li>
+      <li>Bảng tham chiếu thanh điệu dựng từ giọng bản ngữ: MCAE (6 người), Chen Wang (audio-cmn, CC BY-SA), Yue Tan
+        (Shtooka, CC BY-SA 3.0 US), Wei Gao (Shtooka, CC BY 2.0 fr), người đọc Lingua Libre (Wikimedia Commons, CC BY-SA 4.0 / CC0).</li>
+      <li>Bộ dò cao độ: chuyển từ thuật toán của <b>Praat</b> (Paul Boersma & David Weenink, GPL-3.0+) — phần mã này theo GPL-3.0+.</li>
+      <li>Bộ lọc tín hiệu: theo cách của scipy.signal (BSD-3-Clause).</li>
+      <li>Kiểm chứng bộ đo VOT: bộ âm tắc Trừng Hải (Shihan Wang, Mendeley Data, CC BY 4.0); giọng Việt + EGG: SmoothTones
+        (A. Michaud và cs., CNRS-LACITO/MICA, CC BY-NC).</li>
+    </ul>
+  </section>
+</main>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

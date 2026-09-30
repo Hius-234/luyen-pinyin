@@ -1,0 +1,24 @@
+{
+ "phien_ban": "2026-10-01",
+ "nguong_ms": {
+  "b/p": 32,
+  "d/t": 41,
+  "g/k": 59,
+  "z/c": 112,
+  "zh/ch": 86,
+  "j/q": 118
+ },
+ "tac_xat": [
+  "z/c",
+  "zh/ch",
+  "j/q"
+ ],
+ "hang_so": {
+  "TANG_BURST": 10.0,
+  "DAI_CAO_HZ": 1500,
+  "DAI_CAO_PHAN_XU_HZ": 3500,
+  "RUNG_KIN_DB": 15.0,
+  "MIENG_DONG_DB": 20.0,
+  "LIEN_MACH_DB": 6.0
+ }
+}

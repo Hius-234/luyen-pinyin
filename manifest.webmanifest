@@ -1,0 +1,16 @@
+{
+  "name": "Luyện Pinyin",
+  "short_name": "Pinyin",
+  "description": "Luyện phát âm pinyin cá nhân: chấm thanh điệu và bật hơi, phản hồi tiếng Việt",
+  "lang": "vi",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f5f0",
+  "theme_color": "#1f6f5c",
+  "icons": [
+    { "src": "bieu_tuong.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "bieu_tuong_192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "bieu_tuong_512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
