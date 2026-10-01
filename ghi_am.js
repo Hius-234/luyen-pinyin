@@ -37,19 +37,37 @@ function boKhung(fs, moiKhung) {
 }
 
 export class MayGhi {
-  constructor() { this.db = -120; this.sanDb = -120; this.tieuThu = null; this.dungSom = null; this.lanCoMau = 0; this.lanMo = 0; }
+  constructor() {
+    this.db = -120; this.sanDb = -120; this.tieuThu = null; this.dungSom = null; this.lanCoMau = 0; this.lanMo = 0;
+    this.dangMo = null; this.luotMo = 0;
+  }
 
-  async mo() {
+  // Gọi chồng nhau (vào mục thì mở sẵn, người dùng bấm Đọc ngay) dùng chung MỘT lần mở. Mở hai lần thì hai bộ thu
+  // cùng đổ mẫu vào một bản ghi (mỗi khúc 128 mẫu bị lặp đôi -> bản ghi méo, cao độ sai) và bộ thu thừa không bao giờ tắt.
+  mo() {
+    if (!this.dangMo) {
+      const p = this.moThat().finally(() => { if (this.dangMo === p) this.dangMo = null; });
+      this.dangMo = p;
+    }
+    return this.dangMo;
+  }
+
+  async moThat() {
     const r = this.luong && this.luong.getAudioTracks()[0];
     if (this.ctx && r && r.readyState === 'live') { if (this.ctx.state !== 'running') await this.ctx.resume(); return; }
     this.dong();
-    this.luong = await navigator.mediaDevices.getUserMedia({
+    const luot = this.luotMo;                          // dong() trong lúc đang mở (rời màn) -> lần mở này tự dọn, không gắn vào
+    const luong = await navigator.mediaDevices.getUserMedia({
       audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false, channelCount: 1 },
     });
     const ctx = new AudioContext();
-    await ctx.audioWorklet.addModule('ghi_am_worklet.js');
-    this.nguon = ctx.createMediaStreamSource(this.luong);
-    this.nut = new AudioWorkletNode(ctx, 'thu-mau');
+    const boDi = () => { luong.getTracks().forEach((t) => t.stop()); ctx.close().catch(() => {}); };
+    try { await ctx.audioWorklet.addModule('ghi_am_worklet.js'); } catch (e) { boDi(); throw e; }
+    if (luot !== this.luotMo) { boDi(); throw Object.assign(new Error('Đã tắt micro trong lúc đang mở'), { name: 'HuyMo' }); }
+    this.luong = luong;
+    this.nguon = ctx.createMediaStreamSource(luong);
+    // Trộn mọi kênh về một (L+R)/2: có máy trả 2 kênh mà kênh đầu im -> chỉ lấy kênh 0 thì app tưởng micro bị chặn
+    this.nut = new AudioWorkletNode(ctx, 'thu-mau', { channelCount: 1, channelCountMode: 'explicit', channelInterpretation: 'speakers' });
     this.nguon.connect(this.nut);
     this.fs = ctx.sampleRate;
     let p = 0;
@@ -74,6 +92,7 @@ export class MayGhi {
 
   // Tắt micro (rời màn ghi âm) — đèn báo micro của điện thoại tắt theo
   dong() {
+    this.luotMo++; this.dangMo = null;
     if (this.dungSom) this.dungSom();
     if (this.luong) this.luong.getTracks().forEach((t) => t.stop());
     if (this.ctx) this.ctx.close().catch(() => {});

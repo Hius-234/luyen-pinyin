@@ -6,7 +6,7 @@ import { MayGhi, muaMicDuoc, mucOn, sangWav, docTep, bienDoMax, IM_TUYET_DOI, NO
 import { hieuChuan, chamMuc, sangChao } from './phan_tich.js';
 import { doCaoDo } from './engine/cao_do.js';
 
-const PHIEN_BAN = '1.1 (01/10/2026)';
+const PHIEN_BAN = '1.1.1 (01/10/2026)';
 const $ = (id) => document.getElementById(id);
 const tai = async (p) => { const r = await fetch(p); if (!r.ok) throw new Error(`${p}: HTTP ${r.status}`); return r.json(); };
 let TC, BH, LUAT, LT;
