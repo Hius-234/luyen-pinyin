@@ -21,7 +21,8 @@ button:disabled { opacity: .45; cursor: default; }
 button.chinh { background: var(--nhan); border-color: var(--nhan); color: #fff; }
 button.phu { background: transparent; }
 button.to { width: 100%; padding: 16px; font-size: 20px; margin: 10px 0 4px; }
-button.dang_ghi { background: var(--do); border-color: var(--do); }
+button.dang_ghi { background: var(--do); border-color: var(--do); animation: nhip 1.1s ease-in-out infinite; }
+button.dang_phat { border-color: var(--nhan); color: var(--nhan); animation: nhip .9s ease-in-out infinite; }
 .hang { display: flex; gap: 8px; align-items: center; justify-content: space-between; flex-wrap: wrap; margin: 8px 0; }
 .nut_nghe { justify-content: flex-start; }
 .nho { color: var(--phu); font-size: 14px; }
@@ -29,7 +30,7 @@ button.dang_ghi { background: var(--do); border-color: var(--do); }
 .loi { color: var(--do); }
 .muc_am { text-align: center; margin: 8px 0; }
 .pinyin { font-size: 64px; font-weight: 600; line-height: 1.1; }
-#hc_muc_am { font-size: 48px; font-weight: 600; min-height: 60px; }
+#hc_muc_am { font-size: 56px; font-weight: 600; min-height: 64px; line-height: 1.1; }
 .ba_o { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 12px 0; }
 .o { border: 2px solid var(--vien); border-radius: 12px; padding: 8px; text-align: center; background: var(--the); }
 .o .nhan { font-size: 15px; } .o .nhan small { display: block; color: var(--phu); font-size: 12px; }
@@ -53,3 +54,40 @@ canvas { width: 100%; height: auto; background: var(--the); border: 1px solid va
 .luoi button.thanh_thao { background: var(--xanh); border-color: var(--xanh); color: #fff; }
 .luoi button.dang_hoc { border-color: var(--vang); }
 details { margin-top: 16px; }
+
+/* Dấu hiệu "app đang chạy": vòng xoay, nhịp khi ghi/phát, thanh mức micro, thanh thời gian, chấm tiến độ.
+   Chỉ dùng transform/opacity để vẫn chạy mượt khi luồng chính đang bận tính. */
+@keyframes xoay { to { transform: rotate(360deg); } }
+@keyframes nhip { 50% { opacity: .55; } }
+.xoay { display: inline-block; width: 1em; height: 1em; border: 3px solid var(--vien); border-top-color: var(--nhan);
+  border-radius: 50%; animation: xoay .8s linear infinite; vertical-align: -0.15em; margin-right: 6px; }
+.dang_tai { text-align: center; padding: 48px 0; color: var(--phu); font-size: 18px; }
+.trang_thai { min-height: 24px; margin: 6px 0; }
+.trang_thai.dang_phat { color: var(--nhan); font-weight: 600; animation: nhip .9s ease-in-out infinite; }
+.trang_thai.tot { color: var(--xanh); font-weight: 600; }
+.trang_thai.dang_ghi { color: var(--do); font-weight: 600; animation: nhip 1.1s ease-in-out infinite; }
+.trang_thai ol { margin: 6px 0 0; padding-left: 20px; }
+.loi_chung { background: var(--do); color: #fff; padding: 8px 16px; font-size: 14px; cursor: pointer; }
+.trang_thai.loi { color: var(--chu); border-left: 4px solid var(--do); background: var(--the); border-radius: 6px; padding: 8px 10px; }
+.vu { position: relative; height: 16px; border-radius: 8px; background: var(--vien); overflow: hidden; margin: 10px 0 2px; }
+.vu_muc { position: absolute; inset: 0; background: var(--xam); transform-origin: left center; transform: scaleX(0); }
+.vu.qua .vu_muc { background: var(--xanh); }
+.vu_vach { position: absolute; top: 0; bottom: 0; width: 3px; margin-left: -1px; background: var(--chu); display: none; }
+.vu.co_vach .vu_vach { display: block; }
+.vu_chu { font-size: 13px; color: var(--phu); min-height: 18px; margin: 0 0 6px; }
+.vu_chu.canh_bao { color: var(--do); font-weight: 600; }
+.tien_trinh { height: 8px; border-radius: 4px; background: var(--vien); overflow: hidden; margin: 6px 0; }
+.tien_trinh > div { height: 100%; background: var(--nhan); transform-origin: left center; transform: scaleX(0); }
+.cham_tien_do { text-align: center; margin: 6px 0; }
+.cham_tien_do span { display: inline-block; width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--vien); margin: 0 3px; }
+.cham_tien_do span.dang { border-color: var(--nhan); animation: nhip 1s ease-in-out infinite; }
+.cham_tien_do span.xong { background: var(--xanh); border-color: var(--xanh); }
+#hc_ket_qua .hop { border-left: 4px solid var(--vang); background: var(--the); border-radius: 6px; padding: 8px 10px; margin: 8px 0; }
+#hc_ket_qua .hop.loi { border-color: var(--do); color: var(--chu); }
+#hc_ket_qua .hop ol { margin: 6px 0 0; padding-left: 20px; }
+#hc_ket_qua .xong { color: var(--xanh); margin: 2px 0; }
+#hc_nut_phu { width: 100%; margin-top: 4px; }
+@media (prefers-reduced-motion: reduce) {
+  button.dang_ghi, button.dang_phat, .trang_thai.dang_phat, .trang_thai.dang_ghi, .cham_tien_do span.dang { animation: none; }
+  .xoay { animation-duration: 2s; }
+}

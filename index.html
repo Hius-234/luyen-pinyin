@@ -18,14 +18,19 @@
     <button data-man="nguon">Thông tin</button>
   </nav>
 </header>
+<div id="loi_chung" class="loi_chung" hidden></div>
 
 <main>
+  <!-- Đang tải (ẩn khi app.js chạy xong) -->
+  <div id="dang_tai" class="dang_tai"><span class="xoay"></span> Đang tải app…<p id="loi_tai" class="loi"></p></div>
+
   <!-- Lần đầu dùng -->
   <section id="man_chao" hidden>
     <h2>Chào bạn</h2>
     <p>Trước khi luyện, app cần nghe giọng bạn một lần (khoảng 2 phút) để biết giọng bạn cao thấp thế nào. Nhờ vậy
       "thanh 1 cao" là cao <b>so với chính giọng bạn</b>, không so với người khác.</p>
     <ol>
+      <li>Thử micro: nói "a… a…", thấy thanh mức nhảy lên là được.</li>
       <li>Im lặng 3 giây (đo tiếng ồn trong phòng).</li>
       <li>Nói "a" trượt từ thấp nhất lên cao nhất.</li>
       <li>Nghe mẫu rồi đọc 8 âm tiết: mā má mǎ mà (hai lượt).</li>
@@ -40,9 +45,15 @@
     <h2>Hiệu chuẩn giọng</h2>
     <p id="hc_buoc" class="to"></p>
     <p id="hc_huong_dan"></p>
-    <div class="muc_am"><div class="thanh_muc"><div id="hc_muc_am"></div></div></div>
-    <button class="chinh" id="hc_nut"></button>
-    <p id="hc_ket_qua"></p>
+    <div id="hc_cham" class="cham_tien_do" hidden></div>
+    <div class="muc_am"><div id="hc_muc_am"></div></div>
+    <div id="hc_trang_thai" class="trang_thai"></div>
+    <div id="hc_tien_trinh" class="tien_trinh" hidden><div></div></div>
+    <div class="vu" id="hc_vu"><div class="vu_muc"></div><div class="vu_vach"></div></div>
+    <p class="vu_chu"></p>
+    <button class="chinh to" id="hc_nut" hidden></button>
+    <button id="hc_nut_phu" class="phu" hidden></button>
+    <div id="hc_ket_qua"></div>
   </section>
 
   <!-- Lộ trình chặng 1–4 (1.5.3) -->
@@ -71,7 +82,9 @@
       <button id="nut_giong" class="phu"></button>
     </div>
     <button class="chinh to" id="nut_doc">🎤 Đọc</button>
-    <p id="luyen_trang_thai" class="nho"></p>
+    <div class="vu" id="luyen_vu"><div class="vu_muc"></div><div class="vu_vach"></div></div>
+    <p class="vu_chu"></p>
+    <div id="luyen_trang_thai" class="trang_thai"></div>
     <div class="ba_o">
       <div class="o" id="o_thanh_mau"><div class="nhan">声母<small>phụ âm đầu</small></div><div class="dau">·</div></div>
       <div class="o" id="o_van"><div class="nhan">韵母<small>vần</small></div><div class="dau">·</div></div>
@@ -111,9 +124,17 @@
       <li>Kiểm chứng bộ đo VOT: bộ âm tắc Trừng Hải (Shihan Wang, Mendeley Data, CC BY 4.0); giọng Việt + EGG: SmoothTones
         (A. Michaud và cs., CNRS-LACITO/MICA, CC BY-NC).</li>
     </ul>
+    <p class="nho" id="phien_ban"></p>
   </section>
 </main>
 
+<script>
+  // app.js chưa chạy được sau 15 giây (mạng chậm, trình duyệt cũ): báo thay vì quay mãi
+  setTimeout(function () {
+    var d = document.getElementById('dang_tai');
+    if (d && !d.hidden) document.getElementById('loi_tai').textContent = 'Tải lâu hơn bình thường — kiểm tra mạng, hoặc đóng hẳn app rồi mở lại.';
+  }, 15000);
+</script>
 <script type="module" src="app.js"></script>
 </body>
 </html>
